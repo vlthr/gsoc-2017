@@ -18,60 +18,60 @@ Apart from these big picture issues, Dotty also brings a range of new features t
 - Trait parameters: Traits can now take parameters using the same syntax as for classes. While it has always been possible to work around this limitation in Scala2 by either converting the trait to a class (and losing multiple inheritance) or declaring the parameter as an abstract member on the trait, the reduction in boilerplate and increase in consistency is a welcome change. 
 - Union types: Dotty allows you to express types of the form `A | B`, meaning `A or B`. When I first read about them, I couldn't really see myself using them. What surprised me was that given the option, union types a very simple and easy to use tool, and I found myself reaching for them on multiple occasions. For instance:
 
-```scala
-def write(content: String, destination: String | File | Writer): Unit = {
-  val writer = destination match {
-    case f: File => new PrintWriter(new BufferedWriter(new FileWriter(f)))
-    case f: String => new PrintWriter(new BufferedWriter(new FileWriter(f)))
-    case w: Writer => w
-  }
-  writer.write(content)
-}
-```
-Moreover, because `A | B` is a subtype of any other union that contains both `A` and `B`, you can pass the union to other methods as-is:
+    ```scala
+    def write(content: String, destination: String | File | Writer): Unit = {
+    val writer = destination match {
+        case f: File => new PrintWriter(new BufferedWriter(new FileWriter(f)))
+        case f: String => new PrintWriter(new BufferedWriter(new FileWriter(f)))
+        case w: Writer => w
+    }
+    writer.write(content)
+    }
+    ```
+    Moreover, because `A | B` is a subtype of any other union that contains both `A` and `B`, you can pass the union to other methods as-is:
 
-```scala
-def makeWriter(f: String | File | Path) = new PrintWriter(new BufferedWriter(f match {
-  case f: File => new FileWriter(f)
-  case f: String => new FileWriter(f)
-  case f: Path => new FileWriter(f.toFile)
-}))
+    ```scala
+    def makeWriter(f: String | File | Path) = new PrintWriter(new BufferedWriter(f match {
+    case f: File => new FileWriter(f)
+    case f: String => new FileWriter(f)
+    case f: Path => new FileWriter(f.toFile)
+    }))
 
-def write(content: String, destination: String | File | Writer): Unit = {
-  val writer = destination match {
-    case f: (String | File) => makeWriter(f)
-    case w: Writer => w
-  }
-  writer.write(content)
-}
-```
+    def write(content: String, destination: String | File | Writer): Unit = {
+    val writer = destination match {
+        case f: (String | File) => makeWriter(f)
+        case w: Writer => w
+    }
+    writer.write(content)
+    }
+    ```
 
-While union types often partially overlap with the use cases for method overloading, complicated class hierachies, or abstractions like Either they are very easy to use and require minimal overhead.
+    While union types often partially overlap with the use cases for method overloading, complicated class hierachies, or abstractions like Either they are very easy to use and require minimal overhead.
 - Automatic tupling: To map a function over a list of tuples in Scala2, you have to pattern match on the tuple. Dotty allows for automatic unpacking of tuples when used as function arguments.
 
-```scala
-val tuples: List[(String, String)] = ???
+    ```scala
+    val tuples: List[(String, String)] = ???
 
-// Scala2
-tuples.map {
-  case (a, b) => a+b
-}
-// Dotty
-tuples.map((a, b) => a+b)
-```
+    // Scala2
+    tuples.map {
+    case (a, b) => a+b
+    }
+    // Dotty
+    tuples.map((a, b) => a+b)
+    ```
 
-While the difference is small, I find the Dotty style easier to parse and more consistent with my expectations.
+    While the difference is small, I find the Dotty style easier to parse and more consistent with my expectations.
 
 - Improved type inferencing: This one is hard to pin down as it's not a single identifiable feature like the rest. On the whole, Dotty's type system is much better at inferring the correct types for more complex expressions. This became especially noticable when I started porting my Dotty code to Scala2 and had to add type annotations in places where I had just gotten used to the compiler figuring things out on its own. For example, the following compiles with Dotty, but requires either the `val` or the empty map constructor to be annotated in Scala2.
 
-```scala
-def printMap(m: Map[String, String]) = println(m)
+    ```scala
+    def printMap(m: Map[String, String]) = println(m)
 
-val map = if (true) Map("hello" -> "world")
-          else Map()
+    val map = if (true) Map("hello" -> "world")
+            else Map()
 
-printMap(map)
-```
+    printMap(map)
+    ```
 
 ## Show and tell
 The end result is [Levee](https://github.com/vlthr/levee), a standalone templating engine for the Liquid templating language. The library is now available on Sonatype. In addition to providing strict rendering of Liquid templates, Levee allows users to define type safe filters without requiring the user to handle type checking.
