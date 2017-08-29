@@ -89,7 +89,15 @@ val prepend = Filter[StringValue, StringValue :: HNil, HNil]("prepend") {
 
 It was this custom filter feature that ended up taking most of my time, since for a long time every solution I could come up with required the user to either manually handle the type checking, or do some sort of unsafe casting of the inputs to the filter. After weeks of trying I was introduced to Shapeless, a library that provides a set of tools for doing generic programming in Scala. It took a few days to wrap my head around how the library works, but once it clicked I was finally able to solve the problem in a way I was happy with.
 
-There is still some work to be done to make Levee feature complete, and I wouldn’t trust the code to run a space station, but with that said I'm pretty happy about how it turned out.
+In addition to the code in the repository, the following issues on the Dotty repository describe and reproduce crashes that were discovered during the course of the project:
+- [Compiler crash when resolving multiple implicit typeclasses](https://github.com/lampepfl/dotty/issues/2981).
+- [Compiler crash when compiling a bare Map construction with unknown types](https://github.com/lampepfl/dotty/issues/2979).
+
+The library is usable, but not quite feature complete. The remaining work is summarized in the repository issue tracker, with the following being most important:
+- [#42 Implement filters](https://github.com/vlthr/levee/issues/42)
+- [#65 Refactor custom filter code](https://github.com/vlthr/levee/issues/65) - This issue is blocked by issue #2981 on the Dotty tracker.
+- [#66 Implement custom type safe custom tags](https://github.com/vlthr/levee/issues/66)
+- [#67 Allow users to pass in case class objects containing variable mappings](https://github.com/vlthr/levee/issues/67)
 
 ## Lessons learned
 Looking back, there are a few things that I wish I had given more thought to early on in the project.
