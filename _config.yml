@@ -16,7 +16,7 @@
 title: GSoC 2017
 email: halldorsson.v@gmail.com
 baseurl: "/gsoc-2017" # the subpath of your site, e.g. /blog
-url: "http://vlthr.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "http://vlthr.github.io/gsoc-2017" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  vlthr
 
 # Build settings
