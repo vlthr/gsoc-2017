@@ -1,4 +1,5 @@
 ---
+layout: post
 date:   2017-08-29 11:49:45 +0200
 title: "A Summer of Scala"
 author: Valthor Halldorsson
