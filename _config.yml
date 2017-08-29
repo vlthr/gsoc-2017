@@ -15,8 +15,8 @@
 # in the templates via {{ site.myvariable }}.
 title: GSoC 2017
 email: halldorsson.v@gmail.com
-baseurl: "" # the subpath of your site, e.g. /blog
-url: "" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "/gsoc-2017" # the subpath of your site, e.g. /blog
+url: "http://vlthr.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 github_username:  vlthr
 
 # Build settings
